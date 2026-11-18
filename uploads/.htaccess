@@ -1,0 +1,12 @@
+# Allow uploaded images. Refuse scripts. Do not use php_flag here:
+# on many cPanel hosts it makes every file in this folder return 500.
+Options -Indexes -ExecCGI
+RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .php8 .phar .cgi .pl
+<FilesMatch "(?i)\.(php|phtml|phar|cgi|pl|py|asp|aspx|sh|shtml|htaccess)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Deny from all
+    </IfModule>
+</FilesMatch>

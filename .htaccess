@@ -1,0 +1,42 @@
+# FTEE-PEE NIG LTD — Apache config for cPanel shared hosting.
+# The installer sets RewriteBase from the folder you type in.
+# If you move the site later, keep this RewriteBase identical to base_url
+# in config/config.php. Use "/" at the domain root, or "/folder/" in a subdirectory.
+# If the host returns 500 right after upload, comment out the Options line below.
+
+Options -Indexes -MultiViews
+DirectoryIndex index.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    RewriteRule ^(app|config|database|templates)(/|$) - [F,L]
+    RewriteRule (^|/)\.(?!well-known) - [F,L]
+
+    RewriteRule ^install/?$ install.php [L]
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+<FilesMatch "\.(md|sql|ini|log|sh|dist|lock)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+<Files "dev-router.php">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Deny from all
+    </IfModule>
+</Files>

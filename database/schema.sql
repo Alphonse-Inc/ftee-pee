@@ -1,0 +1,187 @@
+-- FTEE-PEE NIG LTD schema for MySQL 5.7+ and MariaDB 10.3+.
+-- The browser installer runs this file. Charset is utf8mb4. No seed rows here.
+
+CREATE TABLE settings (
+    setting_key VARCHAR(100) NOT NULL,
+    setting_value MEDIUMTEXT NULL,
+    PRIMARY KEY (setting_key)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE users (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name VARCHAR(120) NOT NULL,
+    email VARCHAR(190) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    role VARCHAR(20) NOT NULL DEFAULT 'admin',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_users_email (email)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE login_attempts (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    ip_address VARCHAR(45) NOT NULL,
+    email VARCHAR(190) NOT NULL DEFAULT '',
+    attempted_at DATETIME NOT NULL,
+    PRIMARY KEY (id),
+    KEY idx_login_ip (ip_address, attempted_at),
+    KEY idx_login_email (email, attempted_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE services (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name VARCHAR(160) NOT NULL,
+    slug VARCHAR(180) NOT NULL,
+    summary VARCHAR(400) NOT NULL DEFAULT '',
+    body MEDIUMTEXT NOT NULL,
+    process MEDIUMTEXT NOT NULL,
+    icon_key VARCHAR(40) NOT NULL DEFAULT 'print',
+    sort_order INT NOT NULL DEFAULT 0,
+    is_published TINYINT(1) NOT NULL DEFAULT 1,
+    seo_title VARCHAR(180) NOT NULL DEFAULT '',
+    seo_description VARCHAR(320) NOT NULL DEFAULT '',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_services_slug (slug)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE packages (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    service_id INT UNSIGNED NOT NULL,
+    name VARCHAR(160) NOT NULL,
+    summary VARCHAR(400) NOT NULL DEFAULT '',
+    price_label VARCHAR(160) NOT NULL DEFAULT '',
+    price_amount INT UNSIGNED NULL,
+    price_note VARCHAR(400) NOT NULL DEFAULT '',
+    features TEXT NOT NULL,
+    sort_order INT NOT NULL DEFAULT 0,
+    is_sample TINYINT(1) NOT NULL DEFAULT 1,
+    is_published TINYINT(1) NOT NULL DEFAULT 1,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    KEY idx_packages_service (service_id, sort_order),
+    CONSTRAINT fk_packages_service FOREIGN KEY (service_id) REFERENCES services (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE branches (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name VARCHAR(160) NOT NULL,
+    is_head_office TINYINT(1) NOT NULL DEFAULT 0,
+    address_line VARCHAR(255) NOT NULL DEFAULT '',
+    area VARCHAR(120) NOT NULL DEFAULT '',
+    city VARCHAR(120) NOT NULL DEFAULT '',
+    state VARCHAR(120) NOT NULL DEFAULT '',
+    postal_code VARCHAR(20) NOT NULL DEFAULT '',
+    country VARCHAR(80) NOT NULL DEFAULT 'Nigeria',
+    plus_code VARCHAR(40) NOT NULL DEFAULT '',
+    phone VARCHAR(40) NOT NULL DEFAULT '',
+    email VARCHAR(190) NOT NULL DEFAULT '',
+    hours_text VARCHAR(255) NOT NULL DEFAULT '',
+    map_url VARCHAR(500) NOT NULL DEFAULT '',
+    notes TEXT NOT NULL,
+    sort_order INT NOT NULL DEFAULT 0,
+    is_published TINYINT(1) NOT NULL DEFAULT 1,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE gallery_items (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    title VARCHAR(160) NOT NULL,
+    caption VARCHAR(400) NOT NULL DEFAULT '',
+    image_path VARCHAR(255) NOT NULL,
+    alt_text VARCHAR(255) NOT NULL DEFAULT '',
+    image_width INT UNSIGNED NOT NULL DEFAULT 1200,
+    image_height INT UNSIGNED NOT NULL DEFAULT 800,
+    is_placeholder TINYINT(1) NOT NULL DEFAULT 0,
+    sort_order INT NOT NULL DEFAULT 0,
+    is_published TINYINT(1) NOT NULL DEFAULT 1,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE faqs (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    question VARCHAR(255) NOT NULL,
+    answer TEXT NOT NULL,
+    service_id INT UNSIGNED NULL,
+    show_on_home TINYINT(1) NOT NULL DEFAULT 0,
+    sort_order INT NOT NULL DEFAULT 0,
+    is_published TINYINT(1) NOT NULL DEFAULT 1,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    KEY idx_faqs_service (service_id, sort_order),
+    CONSTRAINT fk_faqs_service FOREIGN KEY (service_id) REFERENCES services (id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE posts (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    title VARCHAR(200) NOT NULL,
+    slug VARCHAR(200) NOT NULL,
+    excerpt VARCHAR(400) NOT NULL DEFAULT '',
+    body MEDIUMTEXT NOT NULL,
+    seo_title VARCHAR(180) NOT NULL DEFAULT '',
+    seo_description VARCHAR(320) NOT NULL DEFAULT '',
+    is_published TINYINT(1) NOT NULL DEFAULT 0,
+    published_at DATETIME NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_posts_slug (slug)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE pages (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    title VARCHAR(200) NOT NULL,
+    slug VARCHAR(200) NOT NULL,
+    body MEDIUMTEXT NOT NULL,
+    seo_title VARCHAR(180) NOT NULL DEFAULT '',
+    seo_description VARCHAR(320) NOT NULL DEFAULT '',
+    is_published TINYINT(1) NOT NULL DEFAULT 1,
+    sort_order INT NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_pages_slug (slug)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE enquiries (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name VARCHAR(120) NOT NULL,
+    phone VARCHAR(40) NOT NULL,
+    email VARCHAR(190) NOT NULL,
+    message TEXT NOT NULL,
+    service_id INT UNSIGNED NULL,
+    service_name VARCHAR(160) NOT NULL DEFAULT '',
+    branch_id INT UNSIGNED NULL,
+    branch_name VARCHAR(160) NOT NULL DEFAULT '',
+    status VARCHAR(20) NOT NULL DEFAULT 'new',
+    mail_status VARCHAR(20) NOT NULL DEFAULT 'skipped',
+    ip_address VARCHAR(45) NOT NULL DEFAULT '',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    KEY idx_enquiries_status (status, created_at),
+    KEY idx_enquiries_ip (ip_address, created_at),
+    CONSTRAINT fk_enquiries_service FOREIGN KEY (service_id) REFERENCES services (id) ON DELETE SET NULL,
+    CONSTRAINT fk_enquiries_branch FOREIGN KEY (branch_id) REFERENCES branches (id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE testimonials (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    author_name VARCHAR(120) NOT NULL,
+    author_detail VARCHAR(160) NOT NULL DEFAULT '',
+    quote TEXT NOT NULL,
+    is_sample TINYINT(1) NOT NULL DEFAULT 1,
+    is_published TINYINT(1) NOT NULL DEFAULT 0,
+    sort_order INT NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

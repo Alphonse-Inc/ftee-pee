@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-label="Placeholder visual, not client work">
+  <rect width="1200" height="800" fill="#f3eee4"/>
+  <rect x="36" y="36" width="1128" height="728" fill="none" stroke="#1b1714" stroke-width="3"/>
+  <rect x="48" y="48" width="1128" height="728" fill="none" stroke="#c6a15a" stroke-width="3"/>
+  <rect x="860" y="160" width="180" height="420" fill="#fbf8f2" stroke="#1b1714" stroke-width="3"/>
+  <path d="M820 600h260" stroke="#8f3412" stroke-width="8"/>
+  <path d="M950 160v460" stroke="#5a3e1c" stroke-width="3"/>
+  <text x="80" y="150" fill="#8f3412" font-family="Georgia, serif" font-size="28" letter-spacing="4">PLACEHOLDER</text>
+  <text x="80" y="230" fill="#1b1714" font-family="Georgia, serif" font-size="72">Large format</text>
+  <text x="80" y="290" fill="#433c34" font-family="Georgia, serif" font-size="28">A banner stand, drawn only</text>
+  <text x="80" y="700" fill="#5a3e1c" font-family="Georgia, serif" font-size="22">Not a photograph of client work</text>
+</svg>
