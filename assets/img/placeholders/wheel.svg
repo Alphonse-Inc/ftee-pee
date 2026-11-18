@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-label="Placeholder visual, not client work">
+  <rect width="1200" height="800" fill="#f3eee4"/>
+  <rect x="36" y="36" width="1128" height="728" fill="none" stroke="#1b1714" stroke-width="3"/>
+  <rect x="48" y="48" width="1128" height="728" fill="none" stroke="#c6a15a" stroke-width="3"/>
+  <circle cx="980" cy="390" r="150" fill="none" stroke="#1b1714" stroke-width="8"/>
+  <circle cx="992" cy="402" r="150" fill="none" stroke="#c6a15a" stroke-width="3"/>
+  <circle cx="980" cy="390" r="28" fill="#8f3412"/>
+  <path d="M980 250v280M840 390h280" stroke="#1b1714" stroke-width="3"/>
+  <text x="80" y="150" fill="#8f3412" font-family="Georgia, serif" font-size="28" letter-spacing="4">PLACEHOLDER</text>
+  <text x="80" y="230" fill="#1b1714" font-family="Georgia, serif" font-size="72">Wheel bay</text>
+  <text x="80" y="290" fill="#433c34" font-family="Georgia, serif" font-size="28">A wheel, not a customer's car</text>
+  <text x="80" y="700" fill="#5a3e1c" font-family="Georgia, serif" font-size="22">Not a photograph of client work</text>
+</svg>

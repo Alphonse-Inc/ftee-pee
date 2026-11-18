@@ -1,0 +1,9 @@
+/config/config.php
+/config/installed.lock
+/uploads/*
+!/uploads/.htaccess
+!/uploads/.gitkeep
+!/uploads/index.html
+.DS_Store
+Thumbs.db
+*.log
